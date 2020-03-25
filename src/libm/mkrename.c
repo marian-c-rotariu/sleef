@@ -29,7 +29,7 @@ char *escapeSpace(char *str) {
 int main(int argc, char **argv) {
 
 #ifdef WORKAROUND
-  FILE f = fopen(FOUT, "w+");
+  FILE *f = fopen(FOUT, "w+");
   if (!f) {
     exit(-1);
   }
