@@ -62,7 +62,8 @@ foreach(SIMD ${SLEEF_SUPPORTED_EXTENSIONS})
     # Generate mkrename commands
     add_custom_command(OUTPUT ${HEADER_${SIMD}}
       COMMAND echo Generating rename${vecarch}.h: ${TARGET_MKRENAME} ${RENAME_PARAMS_${SIMD}}
-      COMMAND $<TARGET_FILE:${TARGET_MKRENAME}> ${RENAME_PARAMS_${SIMD}} > ${HEADER_${SIMD}}
+      COMMAND $<TARGET_FILE:${TARGET_MKRENAME}> ${RENAME_PARAMS_${SIMD}}
+      COMMAND mv tempgen.h ${HEADER_${SIMD}}
       DEPENDS ${TARGET_MKRENAME}
     )
     add_custom_target(rename${SIMD}.h_generated DEPENDS ${HEADER_${SIMD}})

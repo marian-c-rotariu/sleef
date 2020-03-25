@@ -10,6 +10,13 @@
 
 #include "funcproto.h"
 
+/* TODO: very ugly workaround, please rewrite */
+#define WORKAROUND 1
+
+#ifdef WORKAROUND
+#define FOUT "tempgen.h"
+#endif
+
 // In VSX intrinsics, vector data types are like "vector float".
 // This function replaces space characters with '_'.
 char *escapeSpace(char *str) {
@@ -20,6 +27,20 @@ char *escapeSpace(char *str) {
 }
 
 int main(int argc, char **argv) {
+
+#ifdef WORKAROUND
+  FILE f = fopen(FOUT, "w+");
+  if (!f) {
+    exit(-1);
+  }
+
+#define printf(...) fprintf(f, ##__VA_ARGS__)
+#endif /* WORKAROUND */
+
+  for (int i = 0; i < argc; i++) {
+    printf("\/\/ argv[%d]=%s\n", argv[i]);
+  }
+
   if (argc < 4) {
     fprintf(stderr, "Generate a header for renaming functions\n");
     fprintf(stderr, "Usage : %s <atr prefix> <DP width> <SP width> [<isa>]\n", argv[0]);
@@ -523,6 +544,10 @@ int main(int argc, char **argv) {
     free(vintname_escspace);
     free(vint2name_escspace);
   }
+
+#ifdef WORKAROUND
+  fclose(f);
+#endif /* WORKAROUND */
 
   exit(0);
 }
